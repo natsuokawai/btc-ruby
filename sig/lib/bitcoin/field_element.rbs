@@ -1,0 +1,15 @@
+module Bitcoin
+  class FieldElement
+    def initialize: (num: Integer, prime: Integer) -> untyped
+
+    attr_reader num: Integer
+    attr_reader prime: Integer
+
+    def to_s: () -> String
+    def ==: (FieldElement) -> bool
+    def +: (FieldElement) -> FieldElement
+    def -: (FieldElement) -> FieldElement
+    def *: (FieldElement) -> FieldElement
+    def **: (Integer) -> FieldElement
+  end
+end
