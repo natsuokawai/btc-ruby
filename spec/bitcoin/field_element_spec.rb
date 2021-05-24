@@ -27,5 +27,11 @@ module Bitcoin
         expect(FieldElement.new(num: 9, prime: 19)**12).to eq(FieldElement.new(num: 7, prime: prime))
       end
     end
+
+    describe 'devide (/)' do
+      it '7 / 5 == 9' do
+        expect(FieldElement.new(num: 7, prime: 19) / FieldElement.new(num: 5, prime: 19)).to eq(FieldElement.new(num: 9, prime: prime))
+      end
+    end
   end
 end
