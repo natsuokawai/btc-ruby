@@ -42,7 +42,7 @@ module Bitcoin
         return Point.new(x: x3, y: y3, a: a, b: b)
       end
 
-      return Point.new(x: nil, y: nil, a: a, b: b) if y1 != y2 || (y1 == y2 && y1 == 0)
+      return Point.new(x: nil, y: nil, a: a, b: b) if y1 != y2 # || (y1 == y2 && y1 == 0)
 
       s = (3 * x1**2 + a) / (2 * y1)
       x3 = s**2 - 2 * x1
