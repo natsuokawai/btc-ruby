@@ -49,5 +49,16 @@ module Bitcoin
       y3 = s * (x1 - x3) - y1
       Point.new(x: x3, y: y3, a: a, b: b)
     end
+
+    def *(other)
+      prod = Point.new(x: nil, y: nil, a: a, b: b)
+      other.times { prod += self }
+      prod
+    end
+
+    # convert scalar * point to point * scalar
+    def coerce(other)
+      [self, other]
+    end
   end
 end
