@@ -26,15 +26,63 @@ module Bitcoin
         let(:prime) { 223 }
         let(:a) { FieldElement.new(num: 0, prime: prime) }
         let(:b) { FieldElement.new(num: 7, prime: prime) }
-        let(:x1) { FieldElement.new(num: 192, prime: prime) }
-        let(:y1) { FieldElement.new(num: 105, prime: prime) }
-        let(:x2) { FieldElement.new(num: 17, prime: prime) }
-        let(:y2) { FieldElement.new(num: 56, prime: prime) }
-        let(:x3) { FieldElement.new(num: 170, prime: prime) }
-        let(:y3) { FieldElement.new(num: 142, prime: prime) }
 
-        it do
+        subject do
           expect(Point.new(x: x1, y: y1, a: a, b: b) + Point.new(x: x2, y: y2, a: a, b: b)).to eq(Point.new(x: x3, y: y3, a: a, b: b))
+        end
+
+        describe '(192, 105) + (17, 56)' do
+          let(:x1) { FieldElement.new(num: 192, prime: prime) }
+          let(:y1) { FieldElement.new(num: 105, prime: prime) }
+          let(:x2) { FieldElement.new(num: 17, prime: prime) }
+          let(:y2) { FieldElement.new(num: 56, prime: prime) }
+          let(:x3) { FieldElement.new(num: 170, prime: prime) }
+          let(:y3) { FieldElement.new(num: 142, prime: prime) }
+
+          it { subject }
+        end
+
+        describe '(170, 142) + (60, 139)' do
+          let(:x1) { FieldElement.new(num: 170, prime: prime) }
+          let(:y1) { FieldElement.new(num: 142, prime: prime) }
+          let(:x2) { FieldElement.new(num: 60, prime: prime) }
+          let(:y2) { FieldElement.new(num: 139, prime: prime) }
+          let(:x3) { FieldElement.new(num: 220, prime: prime) }
+          let(:y3) { FieldElement.new(num: 181, prime: prime) }
+
+          it { subject }
+        end
+      end
+    end
+
+    describe 'mul (*)' do
+      context 'FieldElement' do
+        let(:prime) { 223 }
+        let(:a) { FieldElement.new(num: 0, prime: prime) }
+        let(:b) { FieldElement.new(num: 7, prime: prime) }
+
+        subject do
+          expect(scalar * Point.new(x: x1, y: y1, a: a, b: b)).to eq(Point.new(x: x2, y: y2, a: a, b: b))
+        end
+
+        describe '2 * (192, 105)' do
+          let(:scalar) { 2 }
+          let(:x1) { FieldElement.new(num: 192, prime: prime) }
+          let(:y1) { FieldElement.new(num: 105, prime: prime) }
+          let(:x2) { FieldElement.new(num: 49, prime: prime) }
+          let(:y2) { FieldElement.new(num: 71, prime: prime) }
+
+          it { subject }
+        end
+
+        describe '21 * (47, 71)' do
+          let(:scalar) { 21 }
+          let(:x1) { FieldElement.new(num: 47, prime: prime) }
+          let(:y1) { FieldElement.new(num: 71, prime: prime) }
+          let(:x2) { nil }
+          let(:y2) { nil }
+
+          it { subject }
         end
       end
     end

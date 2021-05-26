@@ -12,6 +12,10 @@ module Bitcoin
       "FieldElement_#{num}(#{prime})"
     end
 
+    def zero?
+      num.zero?
+    end
+
     def ==(other)
       num == other.num && prime == other.prime
     end
@@ -31,6 +35,9 @@ module Bitcoin
     end
 
     def *(other)
+      if other.is_a? Integer
+        other = FieldElement.new(num: other, prime: prime)
+      end
       raise ArgumentError, 'Cannot add two numbers in different Fields' if prime != other.prime
 
       new_num = (num * other.num) % prime
@@ -46,6 +53,10 @@ module Bitcoin
 
       new_num = num * other.num**(prime - 2) % prime
       FieldElement.new(num: new_num, prime: prime)
+    end
+
+    def coerce(other)
+      [self, other]
     end
   end
 end
