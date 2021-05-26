@@ -51,8 +51,14 @@ module Bitcoin
     end
 
     def *(other)
+      coef = other
+      current = self
       prod = Point.new(x: nil, y: nil, a: a, b: b)
-      other.times { prod += self }
+      while coef > 0
+        prod += current if coef & 1 != 0
+        current += current
+        coef >>= 1
+      end
       prod
     end
 
