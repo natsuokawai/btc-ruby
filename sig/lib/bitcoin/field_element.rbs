@@ -9,7 +9,7 @@ module Bitcoin
     def ==: (FieldElement) -> bool
     def +: (FieldElement) -> FieldElement
     def -: (FieldElement) -> FieldElement
-    def *: (FieldElement) -> FieldElement
+    def *: (FieldElement|Integer) -> FieldElement
     def **: (Integer) -> FieldElement
   end
 end

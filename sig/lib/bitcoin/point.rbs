@@ -1,16 +1,15 @@
 module Bitcoin
   class Point
-    def initialize: (x: Integer?, y: Integer?, a: Integer, b: Integer) -> untyped
+    type number = Integer | FieldElement
+    def initialize: (x: number?, y: number?, a: number, b: number) -> untyped
 
-    attr_reader x: Integer?
-    attr_reader y: Integer?
-    attr_reader a: Integer
-    attr_reader b: Integer
+    attr_reader x: number?
+    attr_reader y: number?
+    attr_reader a: number
+    attr_reader b: number
 
     def ==: (Point) -> bool
     def +: (Point) -> Point
-    def -: (Point) -> Point
-    def *: (Point) -> Point
-    def **: (Integer) -> Point
+    def *: (Integer) -> Point
   end
 end
