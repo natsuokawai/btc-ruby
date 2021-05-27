@@ -23,5 +23,14 @@ module Bitcoin
       coef = other % N
       super(coef)
     end
+
+    def verify(z:, sig:)
+      s_inv = sig.s.pow(N, N - 2)
+      u = z * s_inv % N
+      v = sig.r * s_inv % N
+      total = u * G + v * self
+
+      total.x.num == sig.r
+    end
   end
 end
