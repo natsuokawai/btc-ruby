@@ -25,10 +25,10 @@ module Bitcoin
     end
 
     def verify(z:, sig:)
-      s_inv = sig.s.pow(N, N - 2)
+      s_inv = sig.s.pow(N - 2, N)
       u = z * s_inv % N
       v = sig.r * s_inv % N
-      total = u * G + v * self
+      total = u * S256Point.generator_point + v * self
 
       total.x.num == sig.r
     end
