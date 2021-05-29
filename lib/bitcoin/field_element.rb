@@ -51,7 +51,7 @@ module Bitcoin
     def /(other)
       raise ArgumentError, 'Cannot add two numbers in different Fields' if prime != other.prime
 
-      new_num = num * other.num**(prime - 2) % prime
+      new_num = (num * other**(prime - 2)).num % prime
       FieldElement.new(num: new_num, prime: prime)
     end
 
