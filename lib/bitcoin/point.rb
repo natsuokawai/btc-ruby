@@ -39,21 +39,21 @@ module Bitcoin
         s = (y2 - y1) / (x2 - x1)
         x3 = s**2 - x1 - x2
         y3 = s * (x1 - x3) - y1
-        return Point.new(x: x3, y: y3, a: a, b: b)
+        return self.class.new(x: x3, y: y3, a: a, b: b)
       end
 
-      return Point.new(x: nil, y: nil, a: a, b: b) if y1 != y2 || (y1 == y2 && y1.zero?)
+      return self.class.new(x: nil, y: nil, a: a, b: b) if y1 != y2 || (y1 == y2 && y1.zero?)
 
       s = (3 * x1**2 + a) / (2 * y1)
       x3 = s**2 - 2 * x1
       y3 = s * (x1 - x3) - y1
-      Point.new(x: x3, y: y3, a: a, b: b)
+      self.class.new(x: x3, y: y3, a: a, b: b)
     end
 
     def *(other)
       coef = other
       current = self
-      prod = Point.new(x: nil, y: nil, a: a, b: b)
+      prod = self.class.new(x: nil, y: nil, a: a, b: b)
       while coef > 0
         prod += current if coef & 1 != 0
         current += current

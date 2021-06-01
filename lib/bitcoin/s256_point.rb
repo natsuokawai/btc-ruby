@@ -13,13 +13,13 @@ module Bitcoin
       end
     end
 
-    def initialize(x:, y:)
+    def initialize(x:, y:, a: S256Field.new(num: A), b: S256Field.new(num: B))
       if x.is_a? Integer
         x = S256Field.new(num: x)
         y = S256Field.new(num: y)
       end
-      a = S256Field.new(num: A)
-      b = S256Field.new(num: B)
+      #a = S256Field.new(num: a)
+      #b = S256Field.new(num: b)
       super(x: x, y: y, a: a, b: b)
     end
 
@@ -35,6 +35,11 @@ module Bitcoin
       total = u * S256Point.generator_point + v * self
 
       total.x.num == sig.r
+    end
+
+    # Standards for Efficient Cryptography
+    def sec(compressed: false)
+      '04' + x.num.to_s(16) + y.num.to_s(16)
     end
   end
 end

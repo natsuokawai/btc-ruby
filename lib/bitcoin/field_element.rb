@@ -24,35 +24,35 @@ module Bitcoin
       raise ArgumentError, 'Cannot add two numbers in different Fields' if prime != other.prime
 
       new_num = (num + other.num) % prime
-      FieldElement.new(num: new_num, prime: prime)
+      self.class.new(num: new_num, prime: prime)
     end
 
     def -(other)
       raise ArgumentError, 'Cannot add two numbers in different Fields' if prime != other.prime
 
       new_num = (num - other.num) % prime
-      FieldElement.new(num: new_num, prime: prime)
+      self.class.new(num: new_num, prime: prime)
     end
 
     def *(other)
       if other.is_a? Integer
-        other = FieldElement.new(num: other, prime: prime)
+        other = self.class.new(num: other, prime: prime)
       end
       raise ArgumentError, 'Cannot add two numbers in different Fields' if prime != other.prime
 
       new_num = (num * other.num) % prime
-      FieldElement.new(num: new_num, prime: prime)
+      self.class.new(num: new_num, prime: prime)
     end
 
     def **(other)
-      FieldElement.new(num: num.pow(other % prime, prime), prime: prime)
+      self.class.new(num: num.pow(other % prime, prime), prime: prime)
     end
 
     def /(other)
       raise ArgumentError, 'Cannot add two numbers in different Fields' if prime != other.prime
 
       new_num = (num * other**(prime - 2)).num % prime
-      FieldElement.new(num: new_num, prime: prime)
+      self.class.new(num: new_num, prime: prime)
     end
 
     def coerce(other)
