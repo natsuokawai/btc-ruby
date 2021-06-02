@@ -39,7 +39,12 @@ module Bitcoin
 
     # Standards for Efficient Cryptography
     def sec(compressed: false)
-      '04' + x.num.to_s(16) + y.num.to_s(16)
+      if compressed
+        prefix = x.num.even? ? '02' : '03'
+        prefix + x.num.to_s(16)
+      else
+        '04' + x.num.to_s(16) + y.num.to_s(16)
+      end
     end
   end
 end
