@@ -9,7 +9,9 @@ module Bitcoin
     end
     attr_reader :version, :tx_ins, :tx_outs, :locktime, :testnet
 
-    def id; end
+    def id
+      hash.hex
+    end
 
     def hash; end
   end
