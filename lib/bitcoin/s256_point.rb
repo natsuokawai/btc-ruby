@@ -41,7 +41,8 @@ module Bitcoin
     def sec(compressed: false)
       if compressed
         prefix = x.num.even? ? "\x02" : "\x03"
-        prefix + x.force_encoding("ASCII-8BIT")
+        prefix + prefix.force_encoding("ASCII-8BIT")
+        prefix + Helper.int_to_bytes(x.num, 32, :big)
       else
         "\x04".force_encoding("ASCII-8BIT") + Helper.int_to_bytes(x.num, 32, :big) + Helper.int_to_bytes(y.num, 32, :big)
       end
