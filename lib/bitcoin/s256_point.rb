@@ -40,10 +40,10 @@ module Bitcoin
     # Standards for Efficient Cryptography
     def sec(compressed: false)
       if compressed
-        prefix = x.num.even? ? '02' : '03'
-        prefix + x.num.to_s(16)
+        prefix = x.num.even? ? "\x02" : "\x03"
+        prefix + x.force_encoding("ASCII-8BIT")
       else
-        '04' + x.num.to_s(16) + y.num.to_s(16)
+        "\x04".force_encoding("ASCII-8BIT") + Helper.int_to_bytes(x.num, 32, :big) + Helper.int_to_bytes(y.num, 32, :big)
       end
     end
   end

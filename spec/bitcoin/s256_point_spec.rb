@@ -19,5 +19,15 @@ module Bitcoin
 
       it { expect(point.verify(z: z, sig: sig)).to be_truthy }
     end
+
+    describe '#sec' do
+      subject { expect(PrivateKey.new(secret: secret).point.sec).to eq expected }
+
+      context 'not compressed' do
+        let(:secret) { 5000 }
+        let(:expected) { "\x04\xFF\xE5X\xE3\x88\x85/\x01 \xE4j\xF2\xD1\xB3p\xF8XT\xA8\xEB\bA\x81\x1E\xCE\x0E>\x03\xD2\x82\xD5|1]\xC7(\x90\xA4\xF1\n\x14\x81\xC01\xB0;5\e\r\xC7\x99\x01\xCA\x18\xA0\f\xF0\t\xDB\xDB\x15z\x1D\x10".force_encoding("ASCII-8BIT") }
+        it { subject }
+      end
+    end
   end
 end
