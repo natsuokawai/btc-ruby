@@ -20,21 +20,21 @@ module Bitcoin
 
     private
       def deterministic_k(z:)
-        k = "\x00".force_encoding('ASCII-8BIT') * 32
-        v = "\x01".force_encoding('ASCII-8BIT') * 32
+        k = "\x00" * 32
+        v = "\x01" * 32
         z -= S256Point::N if z > S256Point::N
         z_bytes = Helper.int_to_bytes(z, 32, :big)
         secret_bytes = Helper.int_to_bytes(secret, 32, :big)
-        k = OpenSSL::HMAC.digest('sha256', k, v + "\x00".force_encoding('ASCII-8BIT') + secret_bytes + z_bytes)
+        k = OpenSSL::HMAC.digest('sha256', k, v + "\x00" + secret_bytes + z_bytes)
         v = OpenSSL::HMAC.digest('sha256', k, v)
-        k = OpenSSL::HMAC.digest('sha256', k, v + "\x01".force_encoding('ASCII-8BIT') + secret_bytes + z_bytes)
+        k = OpenSSL::HMAC.digest('sha256', k, v + "\x01" + secret_bytes + z_bytes)
         v = OpenSSL::HMAC.digest('sha256', k, v)
         loop do
           v = OpenSSL::HMAC.digest('sha256', k, v)
           candidate = Helper.bytes_to_int(v, :big)
           return candidate if candidate > 1 && candidate < S256Point::N
 
-          k = OpenSSL::HMAC.digest('sha256', k, v + "\x00".force_encoding('ASCII-8BIT'))
+          k = OpenSSL::HMAC.digest('sha256', k, v + "\x00")
           v = OpenSSL::HMAC.digest('sha256', k, v)
         end
       end
