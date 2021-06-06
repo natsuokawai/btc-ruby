@@ -15,5 +15,14 @@ module Bitcoin
       byte_array.reverse! if order == :big
       byte_array.join
     end
+
+    def self.bytes_to_int(bytes, order)
+      unless %i(big little).include?(order)
+        raise ArgumentError, 'order must be either :little or :big'
+      end
+
+      bytes.reverse! if order == :big
+      (0...bytes.size).map { |i| bytes[i].ord << i*8 }.sum
+    end
   end
 end
