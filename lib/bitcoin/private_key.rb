@@ -1,4 +1,4 @@
-require 'securerandom'
+require 'openssl'
 
 module Bitcoin
   class PrivateKey
@@ -9,7 +9,7 @@ module Bitcoin
     attr_reader :secret, :point
 
     def sign(z:)
-      k = SecureRandom.random_number(S256Point::N)
+      k = deterministic_k(z: z)
       r = (k * S256Point.generator_point).x.num
       k_inv = k.pow(S256Point::N - 2, S256Point::N)
       s = (z + r * secret) * k_inv % S256Point::N
@@ -17,5 +17,26 @@ module Bitcoin
       s = S256Point::N - s if s > S256Point::N / 2
       Signature.new(r: r, s: s)
     end
+
+    private
+      def deterministic_k(z:)
+        k = "\x00".force_encoding('ASCII-8BIT') * 32
+        v = "\x01".force_encoding('ASCII-8BIT') * 32
+        z -= S256Point::N if z > S256Point::N
+        z_bytes = Helper.int_to_bytes(z, 32, :big)
+        secret_bytes = Helper.int_to_bytes(secret, 32, :big)
+        k = OpenSSL::HMAC.digest('sha256', k, v + "\x00".force_encoding('ASCII-8BIT') + secret_bytes + z_bytes)
+        v = OpenSSL::HMAC.digest('sha256', k, v)
+        k = OpenSSL::HMAC.digest('sha256', k, v + "\x01".force_encoding('ASCII-8BIT') + secret_bytes + z_bytes)
+        v = OpenSSL::HMAC.digest('sha256', k, v)
+        loop do
+          v = OpenSSL::HMAC.digest('sha256', k, v)
+          candidate = Helper.bytes_to_int(v, :big)
+          return candidate if candidate > 1 && candidate < S256Point::N
+
+          k = OpenSSL::HMAC.digest('sha256', k, v + "\x00".force_encoding('ASCII-8BIT'))
+          v = OpenSSL::HMAC.digest('sha256', k, v)
+        end
+      end
   end
 end
