@@ -1,6 +1,7 @@
 module Bitcoin
   class S256Field < FieldElement
     P = 2**256 - 2**32 - 977
+
     def initialize(num:, prime: P)
       raise ArgumentError, "#{num} is not Integer" unless num.is_a? Integer
 
@@ -8,7 +9,11 @@ module Bitcoin
     end
 
     def to_s
-      format("S256Field_%064<number>d", number: num)
+      format('S256Field_%064<number>d', number: num)
+    end
+
+    def sqrt
+      self**((P + 1) / 4)
     end
   end
 end

@@ -26,16 +26,23 @@ module Bitcoin
       context 'not compressed' do
         let(:secret) { 5000 }
         let(:compressed) { false }
-        let(:expected) { "\x04\xFF\xE5X\xE3\x88\x85/\x01 \xE4j\xF2\xD1\xB3p\xF8XT\xA8\xEB\bA\x81\x1E\xCE\x0E>\x03\xD2\x82\xD5|1]\xC7(\x90\xA4\xF1\n\x14\x81\xC01\xB0;5\e\r\xC7\x99\x01\xCA\x18\xA0\f\xF0\t\xDB\xDB\x15z\x1D\x10".force_encoding("ASCII-8BIT") }
+        let(:expected) { "\x04\xFF\xE5X\xE3\x88\x85/\x01 \xE4j\xF2\xD1\xB3p\xF8XT\xA8\xEB\bA\x81\x1E\xCE\x0E>\x03\xD2\x82\xD5|1]\xC7(\x90\xA4\xF1\n\x14\x81\xC01\xB0;5\e\r\xC7\x99\x01\xCA\x18\xA0\f\xF0\t\xDB\xDB\x15z\x1D\x10".force_encoding('ASCII-8BIT') }
         it { subject }
       end
 
       context 'compressed' do
         let(:secret) { 5001 }
         let(:compressed) { true }
-        let(:expected) { "\x03W\xA4\xF3h\x86\x8A\x8AmW)\x91\xE4\x84\xE6d\x81\x0F\xF1L\x05\xC0\xFA\x022u%\x11Q\xFE\x0ES\xD1".force_encoding("ASCII-8BIT") }
+        let(:expected) { "\x03W\xA4\xF3h\x86\x8A\x8AmW)\x91\xE4\x84\xE6d\x81\x0F\xF1L\x05\xC0\xFA\x022u%\x11Q\xFE\x0ES\xD1".force_encoding('ASCII-8BIT') }
         it { subject }
       end
     end
+  end
+
+  describe 'self.parse_sec' do
+    let(:point) { PrivateKey.new(secret: 5000).point }
+
+    it { expect(S256Point.parse_sec(point.sec(compressed: true))).to eq point }
+    it { expect(S256Point.parse_sec(point.sec(compressed: false))).to eq point }
   end
 end

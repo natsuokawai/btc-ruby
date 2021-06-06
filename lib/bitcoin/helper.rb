@@ -11,7 +11,7 @@ module Bitcoin
         raise ArgumentError, 'order must be either :little or :big'
       end
 
-      byte_array = (0...size).map { |i| ((base_num >> i*8) & 0xFF).chr }
+      byte_array = (0...size).map { |i| ((base_num >> i * 8) & 0xFF).chr }
       byte_array.reverse! if order == :big
       byte_array.join
     end
@@ -22,7 +22,7 @@ module Bitcoin
       end
 
       bytes.reverse! if order == :big
-      (0...bytes.size).map { |i| bytes[i].ord << i*8 }.sum
+      (0...bytes.size).map { |i| bytes[i].ord << i * 8 }.sum
     end
   end
 end

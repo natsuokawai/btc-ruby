@@ -13,13 +13,27 @@ module Bitcoin
       end
     end
 
+    def self.parse_sec(bin)
+      prefix = bin[0].ord
+      if prefix == 4
+        x = Helper.bytes_to_int(bin[1..32], :big)
+        y = Helper.bytes_to_int(bin[33..64], :big)
+        return S256Point.new(x: x, y: y)
+      end
+
+      x = S256Field.new(num: Helper.bytes_to_int(bin[1..32], :big))
+      y1 = (x**3 + S256Field.new(num: B)).sqrt
+      y2 = S256Field.new(num: S256Field::P - y1.num)
+      y = prefix.even? ? [y1, y2].find { _1.num.even? } : [y1, y2].find { _1.num.odd? }
+
+      S256Point.new(x: x, y: y)
+    end
+
     def initialize(x:, y:, a: S256Field.new(num: A), b: S256Field.new(num: B))
       if x.is_a? Integer
         x = S256Field.new(num: x)
         y = S256Field.new(num: y)
       end
-      #a = S256Field.new(num: a)
-      #b = S256Field.new(num: b)
       super(x: x, y: y, a: a, b: b)
     end
 
@@ -40,11 +54,11 @@ module Bitcoin
     # Standards for Efficient Cryptography
     def sec(compressed: false)
       if compressed
-        prefix = x.num.even? ? "\x02" : "\x03"
-        prefix + prefix.force_encoding("ASCII-8BIT")
+        prefix = y.num.even? ? "\x02" : "\x03"
+        prefix + prefix.force_encoding('ASCII-8BIT')
         prefix + Helper.int_to_bytes(x.num, 32, :big)
       else
-        "\x04".force_encoding("ASCII-8BIT") + Helper.int_to_bytes(x.num, 32, :big) + Helper.int_to_bytes(y.num, 32, :big)
+        "\x04".force_encoding('ASCII-8BIT') + Helper.int_to_bytes(x.num, 32, :big) + Helper.int_to_bytes(y.num, 32, :big)
       end
     end
   end
