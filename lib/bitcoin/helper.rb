@@ -24,5 +24,25 @@ module Bitcoin
       bytes.reverse! if order == :big
       (0...bytes.size).map { |i| bytes[i].ord << i * 8 }.sum
     end
+
+    BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
+    def self.encode_base58(bin)
+      count = 0
+      bin.each_byte do |byte|
+        break if byte.ord != 0
+
+        count += 1
+      end
+
+      num = Helper.bytes_to_int(bin, :big)
+      prefix = '1' * count
+      result = ''
+      while num > 0
+        num, mod = num.divmod(58)
+        result = BASE58_ALPHABET[mod] + result
+      end
+
+      prefix + result
+    end
   end
 end
