@@ -6,6 +6,10 @@ module Bitcoin
       Digest::SHA256.hexdigest(Digest::SHA256.digest(str)).hex
     end
 
+    def self.hash160(str)
+      Digest::RMD160.hexdigest(Digest::SHA256.digest(str)).hex
+    end
+
     def self.int_to_bytes(base_num, size, order)
       unless %i(big little).include?(order)
         raise ArgumentError, 'order must be either :little or :big'
