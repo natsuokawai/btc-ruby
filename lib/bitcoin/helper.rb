@@ -2,14 +2,6 @@ require 'digest'
 
 module Bitcoin
   module Helper
-    def self.hash256(str)
-      Digest::SHA256.hexdigest(Digest::SHA256.digest(str)).hex
-    end
-
-    def self.hash160(str)
-      Digest::RMD160.hexdigest(Digest::SHA256.digest(str)).hex
-    end
-
     def self.int_to_bytes(base_num, size, order)
       unless %i(big little).include?(order)
         raise ArgumentError, 'order must be either :little or :big'
@@ -27,6 +19,14 @@ module Bitcoin
 
       bytes.reverse! if order == :big
       (0...bytes.size).map { |i| bytes[i].ord << i * 8 }.sum
+    end
+
+    def self.hash256(str)
+      Digest::SHA256.digest(Digest::SHA256.digest(str))
+    end
+
+    def self.hash160(str)
+      Digest::RMD160.digest(Digest::SHA256.digest(str))
     end
 
     BASE58_ALPHABET = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
