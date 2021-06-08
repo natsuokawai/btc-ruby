@@ -52,13 +52,22 @@ module Bitcoin
     end
 
     # Standards for Efficient Cryptography
-    def sec(compressed: false)
+    def sec(compressed: true)
       if compressed
         prefix = y.num.even? ? "\x02" : "\x03"
         prefix.b + Helper.int_to_bytes(x.num, 32, :big)
       else
         "\x04".b + Helper.int_to_bytes(x.num, 32, :big) + Helper.int_to_bytes(y.num, 32, :big)
       end
+    end
+
+    def hash160(compressed: true)
+      Helper.hash160(sec(compressed: compressed))
+    end
+
+    def address(compressed: true, testnet: false)
+      prefix = testnet ? "\x6f".b : "\x00".b
+      Helper.encode_base58_checksum(prefix + hash160(compressed: compressed))
     end
   end
 end

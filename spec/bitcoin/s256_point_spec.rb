@@ -39,6 +39,12 @@ module Bitcoin
     end
   end
 
+  describe '#address' do
+    it { expect(PrivateKey.new(secret: 5002).point.address(compressed: false, testnet: true)).to eq 'mmTPbXQFxboEtNRkwfh6K51jvdtHLxGeMA' }
+    it { expect(PrivateKey.new(secret: 2020**5).point.address(compressed: true, testnet: true)).to eq 'mopVkxp8UhXqRYbCYJsbeE1h1fiF64jcoH' }
+    it { expect(PrivateKey.new(secret: 0x12345deadbeef).point.address(compressed: true, testnet: false)).to eq '1F1Pn2y6pDb68E5nYJJeba4TLg2U7B6KF1' }
+  end
+
   describe 'self.parse_sec' do
     let(:point) { PrivateKey.new(secret: 5000).point }
 
