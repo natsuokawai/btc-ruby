@@ -48,5 +48,9 @@ module Bitcoin
 
       prefix + result
     end
+
+    def self.encode_base58_checksum(bin)
+      encode_base58(bin + hash256(bin)[0...4])
+    end
   end
 end
