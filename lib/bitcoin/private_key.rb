@@ -18,6 +18,14 @@ module Bitcoin
       Signature.new(r: r, s: s)
     end
 
+    def wif(compressed: true, testnet: false)
+      secret_bytes = Helper.int_to_bytes(secret, 32, :big)
+      prefix = testnet ? "\xef".b : "\x80".b
+      suffix = compressed ? "\x01".b : "".b
+
+      Helper.encode_base58_checksum(prefix + secret_bytes + suffix)
+    end
+
     private
       def deterministic_k(z:)
         k = "\x00".b * 32
