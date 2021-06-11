@@ -13,6 +13,12 @@ module Bitcoin
       hash.hex
     end
 
-    def hash; end
+    def hash
+      Helper.hash256(serialize).reverse
+    end
+
+    def serialize
+      "".b
+    end
   end
 end
