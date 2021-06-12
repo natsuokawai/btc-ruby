@@ -52,5 +52,19 @@ module Bitcoin
     def self.encode_base58_checksum(bin)
       encode_base58(bin + hash256(bin)[0...4])
     end
+
+    def self.read_varint(s)
+      i = s.read(1).unpack('C')[0]
+      case i
+      when 0xfd
+        Helper.bytes_to_int(s.read(2), :little)
+      when 0xfe
+        Helper.bytes_to_int(s.read(4), :little)
+      when 0xff
+        Helper.bytes_to_int(s.read(8), :little)
+      else
+        i
+      end
+    end
   end
 end
