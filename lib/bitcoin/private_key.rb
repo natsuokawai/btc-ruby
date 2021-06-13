@@ -21,7 +21,7 @@ module Bitcoin
     def wif(compressed: true, testnet: false)
       secret_bytes = Helper.int_to_bytes(secret, 32, :big)
       prefix = testnet ? "\xef".b : "\x80".b
-      suffix = compressed ? "\x01".b : "".b
+      suffix = compressed ? "\x01".b : ''.b
 
       Helper.encode_base58_checksum(prefix + secret_bytes + suffix)
     end
