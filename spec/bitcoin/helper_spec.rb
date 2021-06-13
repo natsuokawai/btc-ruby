@@ -22,5 +22,19 @@ module Bitcoin
 
       it { expect(Helper.encode_base58(bin)).to eq expected }
     end
+
+    describe 'self.encode_varint' do
+      it { expect(Helper.encode_varint(100)).to eq  "\x64".b }
+      it { expect(Helper.encode_varint(555)).to eq  "\xfd\x2b\x02".b }
+      it { expect(Helper.encode_varint(70015)).to eq "\xfe\x7f\x11\x01\x00".b }
+      it { expect(Helper.encode_varint(18005558675309)).to eq "\xff\x6d\xc7\xed\x3e\x60\x10\x00\x00".b }
+    end
+
+    describe 'self.read_varint' do
+      it { expect(Helper.read_varint(StringIO.new("\x64".b))).to eq 100 }
+      it { expect(Helper.read_varint(StringIO.new("\xfd\x2b\x02".b))).to eq 555  }
+      it { expect(Helper.read_varint(StringIO.new("\xfe\x7f\x11\x01\x00".b))).to eq 70015 }
+      it { expect(Helper.read_varint(StringIO.new("\xff\x6d\xc7\xed\x3e\x60\x10\x00\x00".b))).to eq 18005558675309 }
+    end
   end
 end

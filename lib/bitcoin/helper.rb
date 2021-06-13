@@ -66,5 +66,19 @@ module Bitcoin
         i
       end
     end
+
+    def self.encode_varint(i)
+      if i < 0xfd
+        [i].pack('C')
+      elsif i < 0x10000
+        "\xfd".b + Helper.int_to_bytes(i, 2, :little)
+      elsif i < 0x100000000
+        "\xfe".b + Helper.int_to_bytes(i, 4, :little)
+      elsif i < 0x10000000000000000
+        "\xff".b + Helper.int_to_bytes(i, 8, :little)
+      else
+        raise ArgumentError, "Integer is too large: #{i}"
+      end
+    end
   end
 end
