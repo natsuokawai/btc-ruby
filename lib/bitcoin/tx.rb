@@ -18,7 +18,12 @@ module Bitcoin
     end
 
     def serialize
-      "".b
+      ''.b
+    end
+
+    def self.parse(cls, stream)
+      serialized_version = stream.read(4)
+      version = serialized_version.unpack('V*')[0]
     end
   end
 end
