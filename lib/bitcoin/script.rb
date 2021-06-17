@@ -29,13 +29,42 @@ module Bitcoin
         end
       end
 
-      raise SyntaxError, "Parsing script failed." if count != length
+      raise SyntaxError, 'Parsing script failed.' if count != length
 
       Script.new(cmds: cmds)
     end
 
     def serialize
+      result = raw_serialize
+      total = result.size
 
+      Helper.envode_varint(total) + result
     end
+
+    private
+      def raw_serialize
+        result = ''.b
+        cmds.each do |cmd|
+          if cmd.is_a? Integer
+            result += Helper.int_to_bytes(cmd, 1, :little)
+          else
+            length = cmd.size
+            if length <= 75
+              result += Helper.int_to_bytes(length, 1, :little)
+            elsif length > 76 && length < 256
+              result += Helper.int_to_bytes(76, 1, :little)
+              result += Helper.int_to_bytes(length, 1, :little)
+            elsif length >= 0x100 && length <= 520
+              result += Helper.int_to_bytes(77, 1, :little)
+              result += Helper.int_to_bytes(length, 2, :little)
+            else
+              raise "cmd is too long: #{length}"
+            end
+            result += cmd
+          end
+        end
+
+        result
+      end
   end
 end
