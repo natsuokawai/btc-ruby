@@ -23,7 +23,7 @@ module Bitcoin
       result += tx_ins.map(&:serialize).join
       result += Helper.encode_varint(tx_outs.size)
       result += tx_outs.map(&:serialize).join
-      result += Helper.int_to_bytes(locktime, 4, :little)
+      result + Helper.int_to_bytes(locktime, 4, :little)
     end
 
     def self.parse(stream)
@@ -34,7 +34,7 @@ module Bitcoin
       tx_ins = (0..tx_in_size).map { TxIn.parse(stream) }
 
       tx_out_size = Helper.read_varint(stream)
-      tx_outs = (0..tx_in_size).map { TxOut.parse(stream) }
+      tx_outs = (0..tx_out_size).map { TxOut.parse(stream) }
 
       locktime = Helper.bytes_to_int(stream.read(4), :little)
 

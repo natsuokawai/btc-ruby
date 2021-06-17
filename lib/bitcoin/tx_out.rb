@@ -7,8 +7,7 @@ module Bitcoin
     attr_reader :amount, :script_pubkey
 
     def serialize
-      result = Helper.int_to_bytes(amount, 8, :little)
-      result += script_pubkey.serialize
+      Helper.int_to_bytes(amount, 8, :little) + script_pubkey.serialize
     end
 
     def self.parse(stream)

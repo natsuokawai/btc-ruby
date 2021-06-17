@@ -12,7 +12,7 @@ module Bitcoin
       result = prev_tx.reverse
       result += Helper.int_to_bytes(prev_index, 4, :little)
       result += script_sig.serialize
-      result += Helper.int_to_bytes(sequence, 4, :little)
+      result + Helper.int_to_bytes(sequence, 4, :little)
     end
 
     def self.parse(stream)
