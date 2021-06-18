@@ -10,12 +10,11 @@ module Bitcoin
       cmds = []
       count = 0
       while count < length
-        current_byte = stream.read(1)
+        current_byte = stream.read(1).unpack('C')[0]
         count += 1
         if current_byte > 1 && current_byte <= 75
-          n = current_byte.unpack('C')[0]
-          cmds.push(stream.read(n))
-          count += n
+          cmds.push(stream.read(current_byte))
+          count += current_byte
         elsif current_byte == 76
           data_length = Helper.bytes_to_int(stream.read(1), :little)
           cmds.push(stream.read(data_length))
@@ -38,7 +37,7 @@ module Bitcoin
       result = raw_serialize
       total = result.size
 
-      Helper.envode_varint(total) + result
+      Helper.encode_varint(total) + result
     end
 
     private
