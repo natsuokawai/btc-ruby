@@ -3,6 +3,9 @@ require 'digest'
 module Bitcoin
   module Helper
     def self.int_to_bytes(base_num, size, order)
+      unless base_num.is_a?(Integer) && size.is_a?(Integer)
+        raise ArgumentError, "base_num and size must be Integer. base_num: #{base_num.class}, size: #{size.class}"
+      end
       unless %i(big little).include?(order)
         raise ArgumentError, 'order must be either :little or :big'
       end

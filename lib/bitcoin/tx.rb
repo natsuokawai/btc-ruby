@@ -9,6 +9,14 @@ module Bitcoin
     end
     attr_reader :version, :tx_ins, :tx_outs, :locktime, :testnet
 
+    def to_s
+      str = "tx: #{id}\n"
+      str += "version: #{version}\n"
+      str += "tx_ins: #{tx_ins.map(&:to_s).join("\n")}\n"
+      str += "tx_outs: #{tx_outs.map(&:to_s).join("\n")}\n"
+      str + "locktime: #{locktime}"
+    end
+
     def id
       hash.hex
     end
@@ -31,10 +39,10 @@ module Bitcoin
       version = serialized_version.unpack('V*')[0]
 
       tx_in_size = Helper.read_varint(stream)
-      tx_ins = (0..tx_in_size).map { TxIn.parse(stream) }
+      tx_ins = (0...tx_in_size).map { TxIn.parse(stream) }
 
       tx_out_size = Helper.read_varint(stream)
-      tx_outs = (0..tx_out_size).map { TxOut.parse(stream) }
+      tx_outs = (0...tx_out_size).map { TxOut.parse(stream) }
 
       locktime = Helper.bytes_to_int(stream.read(4), :little)
 

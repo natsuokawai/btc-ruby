@@ -8,8 +8,12 @@ module Bitcoin
     end
     attr_reader :prev_tx, :prev_index, :script_sig, :sequence
 
+    def to_s
+      "#{prev_tx.hex}:#{prev_index}"
+    end
+
     def serialize
-      result = prev_tx.reverse
+      result = Helper.int_to_bytes(prev_tx, 32, :little)
       result += Helper.int_to_bytes(prev_index, 4, :little)
       result += script_sig.serialize
       result + Helper.int_to_bytes(sequence, 4, :little)

@@ -5,6 +5,20 @@ module Bitcoin
     end
     attr_reader :cmds
 
+    def to_s
+      cmds.map do |cmd|
+        if cmd.is_a? Integer
+          if OP::OP_CODE_FUNCTIONS.key? cmd
+            OP::OP_CODE_FUNCTIONS[cmd]
+          else
+            "OP_[#{cmd}]"
+          end
+        else
+          cmd.hex
+        end
+      end.join(' ')
+    end
+
     def self.parse(stream)
       length = Helper.read_varint(stream)
       cmds = []

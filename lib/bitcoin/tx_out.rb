@@ -6,6 +6,10 @@ module Bitcoin
     end
     attr_reader :amount, :script_pubkey
 
+    def to_s
+      "#{amount}:#{script_pubkey}"
+    end
+
     def serialize
       Helper.int_to_bytes(amount, 8, :little) + script_pubkey.serialize
     end

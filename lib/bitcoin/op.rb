@@ -21,8 +21,8 @@ module Bitcoin
     end
 
     OP_CODE_FUNCTIONS = {
-      0x76 => :op_dup,
-      0xaa => :op_hash256,
+      0x76 => 'OP_DUP',
+      0xaa => 'OP_HASH256',
     }
   end
 end
