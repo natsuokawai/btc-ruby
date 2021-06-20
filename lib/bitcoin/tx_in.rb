@@ -13,14 +13,14 @@ module Bitcoin
     end
 
     def serialize
-      result = Helper.int_to_bytes(prev_tx, 32, :little)
+      result = prev_tx.reverse
       result += Helper.int_to_bytes(prev_index, 4, :little)
       result += script_sig.serialize
       result + Helper.int_to_bytes(sequence, 4, :little)
     end
 
     def self.parse(stream)
-      prev_tx = Helper.bytes_to_int(stream.read(32), :little)
+      prev_tx = stream.read(32).reverse
       prev_index = Helper.bytes_to_int(stream.read(4), :little)
       script_sig = Script.parse(stream)
       sequence = Helper.bytes_to_int(stream.read(4), :little)

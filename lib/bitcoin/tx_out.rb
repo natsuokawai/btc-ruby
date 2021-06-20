@@ -16,7 +16,7 @@ module Bitcoin
 
     def self.parse(stream)
       amount = Helper.bytes_to_int(stream.read(8), :little)
-      script_pubkey = Helper.bytes_to_int(stream.read(8), :little)
+      script_pubkey = Script.parse(stream)
 
       TxOut.new(amount: amount, script_pubkey: script_pubkey)
     end
