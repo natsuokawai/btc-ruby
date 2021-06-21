@@ -8,13 +8,14 @@ module Bitcoin
     def to_s
       cmds.map do |cmd|
         if cmd.is_a? Integer
-          if OP::OP_CODE_FUNCTIONS.key? cmd
-            OP::OP_CODE_FUNCTIONS[cmd]
+          if ::Bitcoin::Op::OP_CODE_FUNCTIONS.key? cmd
+            ::Bitcoin::Op::OP_CODE_FUNCTIONS[cmd]
           else
             "OP_[#{cmd}]"
           end
         else
-          cmd.hex
+          result = Helper.bytes_to_int(cmd, :big).to_s(16)
+          result.size.odd? ? '0' + result : result
         end
       end.join(' ')
     end
