@@ -27,5 +27,19 @@ module Bitcoin
 
       TxIn.new(prev_tx: prev_tx, prev_index: prev_index, script_sig: script_sig, sequence: sequence)
     end
+
+    def fetch_tx(testnet: false)
+      TxFetcher.fetch(prev_tx, testnet: testnet)
+    end
+
+    def value(testnet: false)
+      tx = fetch_tx(testnet: testnet)
+      tx.tx_outs[prev_index].amount
+    end
+
+    def script_pubkey(testnet: false)
+      tx = fetch_tx(testnet: testnet)
+      tx.tx_outs[prev_index].script_pubkey
+    end
   end
 end
