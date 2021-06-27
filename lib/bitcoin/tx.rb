@@ -48,5 +48,9 @@ module Bitcoin
 
       Tx.new(version: version, tx_ins: tx_ins, tx_outs: tx_outs, locktime: locktime)
     end
+
+    def fee(testnet: false)
+      tx_ins.map { _1.value(testnet: testnet) }.sum - tx_outs.map(&:amount).sum
+    end
   end
 end
